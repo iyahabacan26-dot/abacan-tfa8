@@ -1,123 +1,171 @@
-# Laravel POS Management System — TFA7
 
-A Laravel application for managing customer and user records, with form validation, editing, and profile-picture uploads.
+# Laravel POS Management System — TFA8
+
+A Laravel 12 Point-of-Sale (POS) Management System for managing customer and user accounts using resource controllers, form validation, image uploads, and Laravel Breeze authentication.
 
 ## Features
 
-- Customer listing, creation, and editing
-- User listing, creation, and editing
-- Required-field and email validation
-- Unique username validation
-- Validation messages and preservation of previous form input
-- Optional user avatar upload on the edit page
-- JPG, PNG, and WebP uploads up to 2 MB
-- Image dimensions limited to 6000 × 6000 pixels
-- Avatar preparation as a 256 × 256 PNG thumbnail using Intervention Image
-- Public-disk image storage, with only the relative path saved in the database
-- Placeholder image for users without an avatar
+- Customer and user account management
+- Laravel resource controllers and resource routes
+- Customer and user creation and editing
+- Form validation and error handling
+- Laravel Breeze login and registration
+- Authentication using Laravel's auth middleware
+- Protected customer and user management pages
+- Automatic redirection to login for unauthenticated users
+- Secure password hashing
+- User avatar uploads (JPG, PNG, WebP; maximum 2 MB)
+- Avatar resizing using Intervention Image
+- SQLite database integration
+- Custom POS interface with sidebar navigation
 
 ## Requirements
 
-- PHP 8.2 or later, compatible with composer.lock
+- PHP 8.2 or later
 - Composer
+- Node.js and npm
+- Laravel 12
 - PHP GD, mbstring, PDO SQLite, and SQLite3 extensions
 
-## Local Setup
+## Local Installation
 
-1. Download or clone this repository and open a terminal in the project folder.
+1. Clone the repository:
 
-2. Install dependencies:
+   git clone https://github.com/iyahabacan26-dot/abacan-tfa8.git
 
-   ```bash
+2. Open the project folder:
+
+   cd abacan-tfa8
+
+3. Install PHP dependencies:
+
    composer install
-   ```
 
-3. Copy `.env.example` to `.env`.
+4. Install frontend dependencies:
 
-   Windows PowerShell:
+   npm install
 
-   ```powershell
+   On Windows PowerShell, use npm.cmd install if npm is blocked.
+
+5. Copy .env.example to .env:
+
+   Windows:
    Copy-Item .env.example .env
-   ```
 
    macOS/Linux:
-
-   ```bash
    cp .env.example .env
-   ```
 
-4. Generate the application key:
+6. Generate the application key:
 
-   ```bash
    php artisan key:generate
-   ```
 
-5. Set the database connection in `.env`:
+7. Configure SQLite in .env:
 
-   ```env
    DB_CONNECTION=sqlite
-   ```
 
-6. Create an empty `database/database.sqlite` file if it does not exist.
+8. Create an empty database/database.sqlite file if needed.
 
-7. Clear cached configuration and create the database tables:
+9. Run the migrations:
 
-   ```bash
-   php artisan config:clear
    php artisan migrate
-   ```
 
-8. Load five sample customers and five sample users:
+10. Create the public storage link:
 
-   ```bash
-   php artisan db:seed
-   ```
+    php artisan storage:link
 
-9. Create the public storage link:
+11. Build frontend assets:
 
-   ```bash
-   php artisan storage:link
-   ```
+    npm run build
 
-10. Start the development server:
+    On Windows PowerShell, npm.cmd run build may be used.
 
-    ```bash
+12. Start the Laravel server:
+
     php artisan serve
-    ```
 
-11. Open the address printed in the terminal, normally:
+13. Open http://127.0.0.1:8000 in your browser.
 
-    http://127.0.0.1:8000
+## Authentication
 
-## Main Pages
+Laravel Breeze provides user registration, login, and logout.
 
-- `/` — Home
-- `/about` — About
-- `/customers` — Customer listing
-- `/customers/create` — Create customer
-- `/customers/{customer}/edit` — Edit customer
-- `/users` — User listing
-- `/users/create` — Create user
-- `/users/{user}/edit` — Edit user and upload an avatar
+Registration requires:
+- Username
+- Full Name
+- Email
+- Password
+- Password Confirmation
 
-Replace route placeholders with an existing record ID.
+Customer and user management routes are protected using Laravel's auth middleware.
 
-## Avatar Storage
+Unauthenticated users attempting to access protected pages are redirected to the login page.
 
-Processed thumbnails are stored in `storage/app/public/avatars`.
-The database stores only the relative path, such as `avatars/unique-id.png`.
+## Resource Controllers
 
-Uploading a replacement removes the previous avatar after the record is saved.
-Editing without selecting a new image preserves the existing avatar.
+CustomerController and UserController use Laravel's resource routing convention.
 
-Uploaded avatars are local runtime files and are not included in the repository.
-New installations display placeholder images until avatars are uploaded.
+Implemented methods:
+- index()
+- create()
+- store()
+- edit()
+- update()
 
-## Database
+The show() and destroy() methods are excluded because they are not implemented in the existing POS application.
 
-Migration and seeder files are included to recreate the database.
-The local SQLite database and private `.env` file are excluded from version control.
+## Application Routes
 
-## Hosting
+Public Routes:
+- / — Home
+- /about — About
+- /register — Registration
+- /login — Login
 
-The hosted application URL will be added after deployment.
+Protected Routes:
+- /dashboard — Dashboard
+- /customers — Customer listing
+- /customers/create — Add customer
+- /customers/{customer}/edit — Edit customer
+- /users — User listing
+- /users/create — Add user
+- /users/{user}/edit — Edit user
+- /profile — Account profile
+
+## Security
+
+- Laravel Breeze handles authentication.
+- Auth middleware protects management routes.
+- Passwords are securely hashed.
+- Forms use CSRF protection.
+- Input validation is applied to account records.
+- Uploaded images are validated and processed.
+- Environment secrets are excluded from GitHub.
+
+## Database and Storage
+
+SQLite is used for local development.
+
+Migration and seeder files are included in the repository.
+
+User avatars are stored in storage/app/public/avatars.
+
+The .env file, SQLite database, and uploaded images are excluded from version control.
+
+## Testing
+
+The following features were tested locally:
+
+- User registration and login
+- Authentication-based redirects
+- Customer creation and editing
+- User account editing
+- Avatar upload and display
+- Logout and protection of customer/user routes
+
+## GitHub Repository
+
+https://github.com/iyahabacan26-dot/abacan-tfa8
+
+## Hosted Application
+
+To be added after deployment.
